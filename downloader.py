@@ -3,18 +3,21 @@
 import os
 import re
 
-from babelfish import *
-from subliminal import *
+from babelfish import Language
+from subliminal import Video, download_best_subtitles, save_subtitles
 
 # modify as needed
 directory = '/Volumes/Media/'
 
-def download_subtitles_for_all_movies_in_directory(directory):
+
+def download_subtitles_for_all_movies_in_directory(directory, min_filesize_mb=100):
     """
     Function accepts a directory path, walks through the file tree recursively, and
     downloads subtitles for any video files without a subtitle file in the same folder.
-    :param directory:
-    :return:
+
+    :param directory: str
+    :param min_mb_filesize: int
+    :return: None
     """
 
     successful_dls = 0
@@ -25,7 +28,7 @@ def download_subtitles_for_all_movies_in_directory(directory):
             for file in files:
                 filepath = os.path.join(subdir, file)
                 if file.endswith(".mp4") or file.endswith(".avi") or file.endswith(".mkv"):
-                    if not file.startswith('.') and os.path.getsize(filepath) > 1e8:
+                    if not file.startswith('.') and os.path.getsize(filepath) > min_filesize_mb * 1e6:
                         total_dls += 1
                         movie_title = re.split('.avi|.mp4|.mkv', file)[0]
 
@@ -65,7 +68,7 @@ def download_subtitles_for_all_movies_in_directory(directory):
 
 download_subtitles_for_all_movies_in_directory(directory)
 
-if __name__ == '__main__':
-    # directory = input('Enter path of folder to get subtitles for (or drag and drop into Terminal): ')
-
-# download_subtitles_for_all_movies_in_directory(os.getcwd())
+# if __name__ == '__main__':
+#     # directory = input('Enter path of folder to get subtitles for (or drag and drop into Terminal): ')
+#
+# # download_subtitles_for_all_movies_in_directory(os.getcwd())
