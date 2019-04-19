@@ -1,41 +1,45 @@
 #!/usr/bin/env python3
-
 import os
 import re
 
+import click
 from babelfish import Language
 from subliminal import Video, download_best_subtitles, save_subtitles
 
-# modify as needed
-directory = '/Volumes/Media/'
 
+# # modify as needed
+# directory = '/Volumes/Media/'
+# min_filesize_in_mb = 100 # set minimum file size to avoid finding subtitles for sample clips, etc.
 
-def download_subtitles_for_all_movies_in_directory(directory, min_filesize_mb=100):
+@click.command()
+@click.argument('directory', default=os.getcwd(), required=True)
+@click.option('--min_size_mb', '-s', type=click.INT,
+              help='Minimum size (in mb) of video file to use to search for subtitles.')
+def download_subtitles_for_all_movies_in_directory(directory, min_size_mb=100):
     """
-    Function accepts a directory path, walks through the file tree recursively, and
-    downloads subtitles for any video files without a subtitle file in the same folder.
+    Takes in a directory path, walks through the file tree, and downloads subtitles for any video files found.
+    Renames the subtitle file to match the video's name (in order to make it compatible with Roku Media Player.)
 
     :param directory: str
-    :param min_mb_filesize: int
+    :param min_size_mb: int
     :return: None
     """
-
-    successful_dls = 0
-    total_dls = 0
+    successful = 0
+    total = 0
     print('Walking the file tree...')
     for subdir, dirs, files in os.walk(directory):
         if not [i for i in files if i.endswith('.srt')]:
             for file in files:
-                filepath = os.path.join(subdir, file)
-                if file.endswith(".mp4") or file.endswith(".avi") or file.endswith(".mkv"):
-                    if not file.startswith('.') and os.path.getsize(filepath) > min_filesize_mb * 1e6:
-                        total_dls += 1
+                if file.endswith((".mp4", ".avi", ".mkv")):
+                    file_path = os.path.join(subdir, file)
+                    if not file.startswith('.') and os.path.getsize(file_path) > min_size_mb * 1e6:
+                        total += 1
                         movie_title = re.split('.avi|.mp4|.mkv', file)[0]
 
                         try:
                             video = Video.fromname(file)
                         except ValueError:
-                            continue
+                            break
 
                         try:
                             os.chdir(subdir)
@@ -54,21 +58,18 @@ def download_subtitles_for_all_movies_in_directory(directory, min_filesize_mb=10
                             new_name = str(os.path.join(subdir, movie_title)) + '.srt'
                             os.rename(old_name, new_name)
 
-                        except Error:
-                            print("Couldn't rename file.")
+                        except FileNotFoundError:
+                            print(f"Couldn't rename subtitle file for: {movie_title}.")
                             break
 
-                        successful_dls += 1
+                        successful += 1
 
     print()
     print(f'>>> Finished!')
-    print(f'>>> Fetched {successful_dls} / {total_dls} subtitle files successfully.')
+    print(f'>>> Fetched {successful} / {total} subtitle files successfully.')
 
 
-
-download_subtitles_for_all_movies_in_directory(directory)
-
-# if __name__ == '__main__':
-#     # directory = input('Enter path of folder to get subtitles for (or drag and drop into Terminal): ')
+if __name__ == '__main__':
+    download_subtitles_for_all_movies_in_directory()
 #
 # # download_subtitles_for_all_movies_in_directory(os.getcwd())
