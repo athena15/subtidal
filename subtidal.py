@@ -13,21 +13,28 @@ from subliminal import Video, download_best_subtitles, save_subtitles
 
 @click.command()
 @click.argument('directory', default=os.getcwd(), required=True)
-@click.option('--min_size_mb', '-s', type=click.INT,
-              help='Minimum size (in mb) of video file to use to search for subtitles.')
-def download_subtitles_for_all_movies_in_directory(directory, min_size_mb=100):
+@click.option('--min-size-mb', '-s', type=click.INT,
+              help='Minimum size (in MB) that video files must be for subtitles to be downloaded.')
+@click.option('--verbose', '-v', is_flag=True, help='Prints more output to the console.')
+def download_subtitles(directory, min_size_mb=100, verbose=False):
     """
     Takes in a directory path, walks through the file tree, and downloads subtitles for any video files found.
     Renames the subtitle file to match the video's name (in order to make it compatible with Roku Media Player.)
 
-    :param directory: str
-    :param min_size_mb: int
-    :return: None
+    :param str directory: Directory where video files or folders are located.
+    :param int min_size_mb: [optional] Minimum size (in MB) that video files must be for subtitles to be downloaded.
+    :param bool verbose: bool [optional] Prints more output to the console.
+
+    Examples:
+    1. download_subtitles('./Users/Laura/Movies')
+    2. download_subtitles(directory='./Users/Tim/TV Shows', min_size_mb=250, verbose=True)
     """
     successful = 0
     total = 0
     print('Walking the file tree...')
     for subdir, dirs, files in os.walk(directory):
+        if verbose:
+            print(subdir)
         if not [i for i in files if i.endswith('.srt')]:
             for file in files:
                 if file.endswith((".mp4", ".avi", ".mkv")):
@@ -38,6 +45,7 @@ def download_subtitles_for_all_movies_in_directory(directory, min_size_mb=100):
 
                         try:
                             video = Video.fromname(file)
+
                         except ValueError:
                             break
 
@@ -70,6 +78,4 @@ def download_subtitles_for_all_movies_in_directory(directory, min_size_mb=100):
 
 
 if __name__ == '__main__':
-    download_subtitles_for_all_movies_in_directory()
-#
-# # download_subtitles_for_all_movies_in_directory(os.getcwd())
+    download_subtitles()
