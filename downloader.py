@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
 import os
-from subliminal import *
-from babelfish import *
 import re
 
+from babelfish import *
+from subliminal import *
+
+# modify as needed
 directory = '/Volumes/Media/'
 
 def download_subtitles_for_all_movies_in_directory(directory):
@@ -61,11 +63,9 @@ def download_subtitles_for_all_movies_in_directory(directory):
 
 
 
-
-
 download_subtitles_for_all_movies_in_directory(directory)
 
 if __name__ == '__main__':
     # directory = input('Enter path of folder to get subtitles for (or drag and drop into Terminal): ')
 
-    download_subtitles_for_all_movies_in_directory(directory)
+# download_subtitles_for_all_movies_in_directory(os.getcwd())
