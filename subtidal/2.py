@@ -2,20 +2,15 @@
 import os
 import re
 
-import click
 from babelfish import Language
 from subliminal import Video, download_best_subtitles, save_subtitles
 
-
 # # modify as needed
-# directory = '/Volumes/Media/'
+directory = '/Volumes/Media/'
+
+
 # min_filesize_in_mb = 100 # set minimum file size to avoid finding subtitles for sample clips, etc.
 
-@click.command()
-@click.argument('directory', default=os.getcwd(), required=True)
-@click.option('--min-size-mb', '-s', type=click.INT,
-              help='Minimum size (in MB) that video files must be for subtitles to be downloaded.')
-@click.option('--verbose', '-v', is_flag=True, help='Prints more output to the console.')
 def download_subtitles(directory, min_size_mb=100, verbose=False):
     """
     Takes in a directory path, walks through the file tree, and downloads subtitles for any video files found.
@@ -33,8 +28,6 @@ def download_subtitles(directory, min_size_mb=100, verbose=False):
     total = 0
     print('Walking the file tree...')
     for subdir, dirs, files in os.walk(directory):
-        if verbose:
-            print(subdir)
         if not [i for i in files if i.endswith('.srt')]:
             for file in files:
                 if file.endswith((".mp4", ".avi", ".mkv")):
@@ -47,12 +40,15 @@ def download_subtitles(directory, min_size_mb=100, verbose=False):
                             video = Video.fromname(file)
 
                         except ValueError:
-                            continue
+                            if verbose:
+                                print(f'Failed on: {movie_title}')
+                            break
 
                         try:
                             os.chdir(subdir)
                             best_subtitles = download_best_subtitles([video], {Language('eng')},
-                                                                     providers=['opensubtitles', 'thesubdb','tvsubtitles'])
+                                                                     providers=['opensubtitles', 'thesubdb',
+                                                                                'tvsubtitles'])
                             best_subtitle = best_subtitles[video][0]
                             save_subtitles(video, [best_subtitle])
                             print(f'Successfully downloaded subtitle for: {movie_title}')
@@ -68,7 +64,7 @@ def download_subtitles(directory, min_size_mb=100, verbose=False):
 
                         except FileNotFoundError:
                             print(f"Couldn't rename subtitle file for: {movie_title}.")
-                            break
+                            continue
 
                         successful += 1
 
@@ -77,5 +73,4 @@ def download_subtitles(directory, min_size_mb=100, verbose=False):
     print(f'>>> Fetched {successful} / {total} subtitle files successfully.')
 
 
-if __name__ == '__main__':
-    download_subtitles()
+download_subtitles('/Volumes/Media/', min_size_mb=50, verbose=True)
