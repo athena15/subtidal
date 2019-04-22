@@ -20,6 +20,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/athena15/subtidal",
+    include_package_data=True,
     packages=['subtidal'],
     py_modules=['subtidal'],
     entry_points='''

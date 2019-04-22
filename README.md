@@ -10,7 +10,7 @@ Makes quick work of central media folders and entire hard drives alike. Ideally,
 
 ***Motivation***
 
-This is a personal project, but I hope it is of use to you. I got frustrated (or rather, was very mildly inconvenienced) because some of the movies I downloaded online didn't come included with subtitles, and I had to download them myself from sites like [opensubtitles.org](https://opensubtitles.org). Furthermore, even when subtitles were included with a movie, if the filename differed at all from the name of the movie, they weren't recognized by the Roku Media Player, so I set about to rectify that.
+This is a personal project, but I hope it is of use to you. I got frustrated (or rather, was very mildly inconvenienced) because some of the movies I downloaded online didn't come included with subtitles, and I had to download them myself from sites like [opensubtitles.org](https://opensubtitles.org). Furthermore, even when subtitles *were* included with a movie, if the filename differed at all from the name of the movie, they weren't recognized by the Roku Media Player, so I set about to rectify that.
 
 I have a huge, network-attached-storage media folder that acts as the central repository for all of the movies I download online, and I wanted to create a package that could download missing subtitles for every movie in it in one fell swoop. 
 
