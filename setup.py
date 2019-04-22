@@ -1,4 +1,4 @@
-import setuptools
+from setuptools import setup
 
 __version__ = '1.0.0'
 __author__ = 'Brenner Heintz'
@@ -11,7 +11,7 @@ with open("README.md", "r") as f:
 with open("requirements.txt") as f:
     dependencies = f.read().splitlines()
 
-setuptools.setup(
+setup(
     name="subtidal",
     version=__version__,
     author=__author__,
@@ -21,11 +21,11 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/athena15/subtidal",
     packages=['subtidal'],
-    entry_points={
-        'console_scripts': [
-            'command-name = package.module:download_subtitles',
-        ],
-    },
+    py_modules=['subtidal'],
+    entry_points='''
+            [console_scripts]
+            download-subtitles=subtidal.download:download_subtitles
+        ''',
     classifiers=["Programming Language :: Python :: 3",
                  "License :: OSI Approved :: MIT License",
                  "Operating System :: OS Independent"],

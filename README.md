@@ -28,20 +28,24 @@ pip install subtidal
 *Option 1: From the command line*
 
 ```bash
+download-subtitles '/path/to/Your Movie Folder'
+```
+or: 
+```bash
 cd subtidal
-python3 subtidal.py "./path/to/Your Movie Folder"
+python3 subtidal.py "/path/to/Your Movie Folder"
 ```
 
 *Option 2: From Python*
 
 ```python
-from subtidal import download_subtitles
+from subtidal.download import download_subtitles
 
 # path only
-subtidal.download_subtitles("./path/to/Your Movie Folder")
+download_subtitles("./path/to/Your Movie Folder")
 
 # path + optional parameters
-subtidal.download_subtitles(directory="./path/to/Your Movie Folder", min_size_mb=100, verbose=True)
+download_subtitles(directory="./path/to/Your Movie Folder", min_size_mb=100, verbose=True)
 ```
 
 ### Additional function & parameter info in the docstring
