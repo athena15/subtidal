@@ -23,10 +23,13 @@ def download(directory, verbose=False):
     successful = 0
     videos = []
 
+    # Walk the file path, identifying video files that do not have a .srt (subtitle) file in the same folder.
+    # Then collect the file and directory names within list 'videos' that we will iterate over later.
+    directory = os.path.abspath(directory)
     if not os.path.isdir(directory):
         print(f'>>> Error: "{directory}" is not a valid directory. Please try again.')
         return 0
-    print('Walking the file tree...')
+    print('>>> Walking the file tree...')
     for subdir, dirs, files in os.walk(directory):
         if verbose:
             print(subdir)
@@ -37,6 +40,14 @@ def download(directory, verbose=False):
                     if not file.startswith('.'):  # and os.path.getsize(file_path) > min_size_mb * 1e6:
                         videos.append([file, subdir])
 
+    # check to see if video files found
+    if not videos:
+        if verbose:
+            print('No movie files found in folder.')
+        return 0
+
+    # iterate over 'videos' and download subtitles
+    print('>>> Downloading subtitles...')
     for file, subdir in tqdm(videos):
 
         try:
@@ -59,13 +70,17 @@ def download(directory, verbose=False):
 
         except IndexError:
             if verbose:
-                print(f'Unable to download subtitle for: {file}')
+                print(f'Subtitles not found online for: {file}')
             continue
 
         try:
             movie_title = re.split('.avi|.mp4|.mkv', file)[0]
             old_name = str(os.path.join(subdir, movie_title)) + '.en.srt'
             new_name = str(os.path.join(subdir, movie_title)) + '.srt'
+            if verbose:
+                print(f'Old name: {old_name}')
+                print(f'New name: {new_name}')
+                print(f'Path    : {str(os.path.join(subdir, movie_title))}')
             os.rename(old_name, new_name)
 
         except FileNotFoundError:
@@ -92,5 +107,7 @@ def download_subtitles(directory, verbose=False):
 
 
 if __name__ == '__main__':
-    download_subtitles()
+    # download_subtitles()
     # download('/Volumes/Media/', verbose=True)
+    print(os.getcwd())
+    download('/Users/brennerheintz/Movies/', verbose=True)
