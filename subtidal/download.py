@@ -4,6 +4,7 @@ import re
 import click
 from babelfish import Language
 from subliminal import Video, download_best_subtitles, save_subtitles
+from tqdm import tqdm
 
 
 def download(directory, verbose=False):
@@ -20,7 +21,8 @@ def download(directory, verbose=False):
     2. download_subtitles(directory='./Users/Tim/TV Shows', min_size_mb=250, verbose=True)
     """
     successful = 0
-    total = 0
+    videos = []
+
     if not os.path.isdir(directory):
         print(f'>>> Error: "{directory}" is not a valid directory. Please try again.')
         return 0
@@ -31,44 +33,51 @@ def download(directory, verbose=False):
         if not [i for i in files if i.endswith('.srt')]:
             for file in files:
                 if file.endswith((".mp4", ".avi", ".mkv")):
-                    file_path = os.path.join(subdir, file)
+                    # file_path = os.path.join(subdir, file)
                     if not file.startswith('.'):  # and os.path.getsize(file_path) > min_size_mb * 1e6:
-                        total += 1
-                        movie_title = re.split('.avi|.mp4|.mkv', file)[0]
+                        videos.append([file, subdir])
 
-                        try:
-                            video = Video.fromname(file)
+    for file, subdir in tqdm(videos):
 
-                        except ValueError:
-                            continue
+        try:
+            video = Video.fromname(file)
 
-                        try:
-                            os.chdir(subdir)
-                            best_subtitles = download_best_subtitles([video], {Language('eng')},
-                                                                     providers=['opensubtitles', 'thesubdb',
-                                                                                'tvsubtitles'])
-                            best_subtitle = best_subtitles[video][0]
-                            save_subtitles(video, [best_subtitle])
-                            print(f'Successfully downloaded subtitle for: {movie_title}')
+        except ValueError:
+            if verbose:
+                print(f'Could not find a match for file: {file}')
+            continue
 
-                        except IndexError:
-                            print(f'Unable to download subtitle for: {movie_title}')
-                            continue
+        try:
+            os.chdir(subdir)
+            best_subtitles = download_best_subtitles([video], {Language('eng')},
+                                                     providers=['opensubtitles', 'thesubdb',
+                                                                'tvsubtitles'])
+            best_subtitle = best_subtitles[video][0]
+            save_subtitles(video, [best_subtitle])
+            if verbose:
+                print(f'Successfully downloaded subtitle for: {file}')
 
-                        try:
-                            old_name = str(os.path.join(subdir, movie_title)) + '.en.srt'
-                            new_name = str(os.path.join(subdir, movie_title)) + '.srt'
-                            os.rename(old_name, new_name)
+        except IndexError:
+            if verbose:
+                print(f'Unable to download subtitle for: {file}')
+            continue
 
-                        except FileNotFoundError:
-                            print(f"Couldn't rename subtitle file for: {movie_title}.")
-                            break
+        try:
+            movie_title = re.split('.avi|.mp4|.mkv', file)[0]
+            old_name = str(os.path.join(subdir, movie_title)) + '.en.srt'
+            new_name = str(os.path.join(subdir, movie_title)) + '.srt'
+            os.rename(old_name, new_name)
 
-                        successful += 1
+        except FileNotFoundError:
+            if verbose:
+                print(f"Couldn't rename subtitle file for: {movie_title}.")
+            break
+
+        successful += 1
 
     print()
     print(f'>>> Finished!')
-    print(f'>>> Fetched {successful} / {total} subtitle files successfully.')
+    print(f'>>> Fetched {successful} / {len(videos)} subtitle files successfully.')
     return
 
 
@@ -83,5 +92,5 @@ def download_subtitles(directory, verbose=False):
 
 
 if __name__ == '__main__':
-    # download_subtitles()
-    download('hello', verbose=True)
+    download_subtitles()
+    # download('/Volumes/Media/', verbose=True)

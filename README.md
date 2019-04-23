@@ -12,9 +12,7 @@ Makes quick work of central media folders and entire hard drives alike. Ideally,
 
 This is a personal project, but I hope it is of use to you. I got frustrated (or rather, was very mildly inconvenienced) because some of the movies I downloaded online didn't come included with subtitles, and I had to download them myself from sites like [opensubtitles.org](https://opensubtitles.org). Furthermore, even when subtitles *were* included with a movie, if the filename differed at all from the name of the movie, they weren't recognized by the Roku Media Player, so I set about to rectify that.
 
-I have a huge, network-attached-storage media folder that acts as the central repository for all of the movies I download online, and I wanted to create a package that could download missing subtitles for every movie in it in one fell swoop. 
-
-I imagined that as I downloaded new movies and TV shows into this central repository, I'd be able to run the package periodically via a cron job on my Raspberry Pi, so I'd never have to suffer the loathsome indignity of watching a show without having subtitles available ever again. This package is my attempt to make that vision a reality (or to make some fun out of laziness, depending on how you look at it), and in so doing, make a package available to the public on PyPI, which I had never done before.
+I have a huge, network-attached-storage media folder that acts as the central repository for all of the movies I download online, and I wanted to create a package that could download missing subtitles for every movie in it in one fell swoop. I imagined that as I downloaded new movies and TV shows into this central repository, I'd be able to run the package periodically via a cron job on my Raspberry Pi, so I'd never have to suffer the loathsome indignity of watching a show without having subtitles available ever again. This package is my attempt to make that vision a reality (or to make some fun out of laziness, depending on how you look at it), and in so doing, make a package available to the public on PyPI, which I had never done before.
 
 ## Installation
 
@@ -25,10 +23,14 @@ pip install subtidal
 ```
 
 ## Quickstart
-*Option 1: From the command line*
+***Option 1:** From the command line*
 
 ```bash
-download-subtitles '/path/to/Your Movie Folder'
+download-subtitles /path/to/Your Movie Folder
+
+# or simply cd into the folder you want to download subtitles for, then call 'download-subtitles' like this:
+cd /path/to/Your Movie Folder
+download-subtitles
 ```
 or: 
 ```bash
@@ -36,16 +38,15 @@ cd subtidal
 python3 subtidal.py "/path/to/Your Movie Folder"
 ```
 
-*Option 2: From Python*
+***Option 2:** From Python*
 
 ```python
-from subtidal.download import download_subtitles
+from subtidal.download import download
 
-# path only
-download_subtitles("./path/to/Your Movie Folder")
+download("./path/to/Your Movie Folder")
 
-# path + optional parameters
-download_subtitles(directory="./path/to/Your Movie Folder", min_size_mb=100, verbose=True)
+# you can also add optional parameters
+download(directory="./path/to/Your Movie Folder", verbose=True)
 ```
 
 ### Additional function & parameter info in the docstring
