@@ -3,7 +3,7 @@
 ![GitHub](https://img.shields.io/github/license/athena15/subtidal.svg)
 [![python3](https://img.shields.io/badge/built%20with-Python%203-red.svg)](https://www.python.org/)
 
-A command line utility for **batch downloading subtitles for all movies organized in a central media folder.***
+A command line utility for **batch downloading subtitles for all movies organized in a central media folder.**
 
 Walks the file tree, visiting subfolders and downloading subtitles for each movie if they do not already exist.
 
