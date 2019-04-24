@@ -11,9 +11,8 @@ def download(directory, verbose=False):
     Takes in a directory path, walks through the file tree, and downloads subtitles for any video files found.
     Renames the subtitle file to match the video's name (in order to make it compatible with Roku Media Player.)
 
-    :param str directory: Directory where video files or folders are located.
-    :param int min_size_mb: [optional] Minimum size (in MB) that video files must be for subtitles to be downloaded.
-    :param bool verbose: bool [optional] Prints more output to the console.
+    :param (str) directory: Directory where video files or folders are located.
+    :param (bool) verbose: bool [optional] Prints more output to the console.
 
     Examples:
     1. download_subtitles('./Users/Laura/Movies')
@@ -22,7 +21,7 @@ def download(directory, verbose=False):
     successful = 0
     videos = []
 
-    # Walk the file path, identifying video files that do not have a .srt (subtitle) file in the same folder.
+    # Walk the file path, identifying video files that do not have a matching .srt (subtitle) file in the same folder.
     # Then collect the file and directory names within list 'videos' that we will iterate over later.
     directory = os.path.abspath(directory)
     if not os.path.isdir(directory):
@@ -32,12 +31,14 @@ def download(directory, verbose=False):
     for subdir, dirs, files in os.walk(directory):
         if verbose:
             print(subdir)
-        if not [i for i in files if i.endswith('.srt')]:
-            for file in files:
-                if file.endswith((".mp4", ".avi", ".mkv")):
-                    # file_path = os.path.join(subdir, file)
-                    if not file.startswith('.'):  # and os.path.getsize(file_path) > min_size_mb * 1e6:
-                        videos.append([file, subdir])
+        for file in files:
+            if file.endswith((".mp4", ".avi", ".mkv")) and not file.startswith('.'):
+                movie_title = re.split('.mp4|.avi|.mkv', file)[0]
+                if os.path.isfile(str(os.path.join(subdir, movie_title) + '.srt')):
+                    print(str(os.path.join(subdir, movie_title)) + '.srt')
+                    continue
+                else:
+                    videos.append([movie_title, file, subdir])
 
     # check to see if video files found
     if not videos:
@@ -46,7 +47,7 @@ def download(directory, verbose=False):
 
     # iterate over 'videos' and download subtitles
     print('>>> Downloading subtitles...')
-    for file, subdir in tqdm(videos):
+    for movie_title, file, subdir in tqdm(videos):  # tqdm == progress bar
 
         try:
             video = Video.fromname(file)
@@ -72,7 +73,6 @@ def download(directory, verbose=False):
             continue
 
         try:
-            movie_title = re.split('.avi|.mp4|.mkv', file)[0]
             old_name = str(os.path.join(subdir, movie_title)) + '.en.srt'
             new_name = str(os.path.join(subdir, movie_title)) + '.srt'
             if verbose:
@@ -92,7 +92,6 @@ def download(directory, verbose=False):
     print(f'>>> Finished!')
     print(f'>>> Fetched {successful} / {len(videos)} subtitle files successfully.')
     return
-
 
 
 if __name__ == '__main__':
