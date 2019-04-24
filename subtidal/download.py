@@ -1,7 +1,6 @@
 import os
 import re
 
-import click
 from babelfish import Language
 from subliminal import Video, download_best_subtitles, save_subtitles
 from tqdm import tqdm
@@ -95,15 +94,6 @@ def download(directory, verbose=False):
     return
 
 
-@click.command()
-@click.argument('directory', default=os.getcwd(), required=True)
-# @click.option('--min-size-mb', '-s', type=click.INT,
-#               help='Minimum size (in MB) that video files must be for subtitles to be downloaded.')
-@click.option('--verbose', '-v', is_flag=True, help='Prints more output to the console.')
-def download_subtitles(directory, verbose=False):
-    download(directory, verbose)
-
-
 
 if __name__ == '__main__':
-    download_subtitles()
+    download(os.getcwd())

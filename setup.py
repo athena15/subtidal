@@ -3,7 +3,7 @@ from setuptools import setup
 __version__ = '1.0.0'
 __author__ = 'Brenner Heintz'
 
-description = "Subtidal, for batch downloading subtitles for all movies in a media folder."
+description = "Subtidal, for batch downloading subtitles for all movies in a central media folder."
 
 with open("README.md", "r") as f:
     long_description = f.read()
@@ -25,7 +25,7 @@ setup(
     py_modules=['subtidal'],
     entry_points='''
             [console_scripts]
-            download-subtitles=subtidal.download:download_subtitles
+            download-subtitles=subtidal.cli:download_subtitles
         ''',
     classifiers=["Programming Language :: Python :: 3",
                  "License :: OSI Approved :: MIT License",
