@@ -42,8 +42,7 @@ def download(directory, verbose=False):
 
     # check to see if video files found
     if not videos:
-        if verbose:
-            print('No movie files found in folder.')
+        print('No movie files without subtitles found in folder.')
         return 0
 
     # iterate over 'videos' and download subtitles
@@ -107,7 +106,4 @@ def download_subtitles(directory, verbose=False):
 
 
 if __name__ == '__main__':
-    # download_subtitles()
-    # download('/Volumes/Media/', verbose=True)
-    print(os.getcwd())
-    download('/Users/brennerheintz/Movies/', verbose=True)
+    download_subtitles()
