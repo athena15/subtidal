@@ -97,5 +97,4 @@ def download(directory, language='eng', verbose=False):
 
 
 if __name__ == '__main__':
-    # download(os.getcwd())
-    download('/Users/brennerheintz/Movies/')
+    download(os.getcwd())
