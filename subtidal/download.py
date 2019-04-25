@@ -1,12 +1,14 @@
+#!/usr/bin/env python3
+
 import os
 import re
 
+import click
 from babelfish import Language
 from subliminal import Video, download_best_subtitles, save_subtitles
-from tqdm import tqdm
 
 
-def download(directory, verbose=False):
+def download(directory, language='eng', verbose=False):
     """
     Takes in a directory path, walks through the file tree, and downloads subtitles for any video files found.
     Renames the subtitle file to match the video's name (in order to make it compatible with Roku Media Player.)
@@ -15,8 +17,8 @@ def download(directory, verbose=False):
     :param (bool) verbose: bool [optional] Prints more output to the console.
 
     Examples:
-    1. download_subtitles('./Users/Laura/Movies')
-    2. download_subtitles(directory='./Users/Tim/TV Shows', min_size_mb=250, verbose=True)
+    1. download_subtitles('/Users/Laura/Movies')
+    2. download_subtitles(directory='./Users/Tim/TV Shows', language='spa', verbose=True)
     """
     successful = 0
     videos = []
@@ -95,4 +97,5 @@ def download(directory, verbose=False):
 
 
 if __name__ == '__main__':
-    download(os.getcwd())
+    # download(os.getcwd())
+    download('/Users/brennerheintz/Movies/')
