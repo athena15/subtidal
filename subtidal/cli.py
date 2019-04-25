@@ -11,8 +11,11 @@ from subtidal.download import download
 #               help='Minimum size (in MB) that video files must be for subtitles to be downloaded.')
 @click.option('--language', '-l', help=')
 @click.option('--verbose', '-v', is_flag=True, help='Prints more output to the console.')
-def download_subtitles(directory, verbose=False):
-    download(directory, verbose)
+@click.option('--language', '-l', default='eng',
+              help='Desired language for subtitles, expressed as a 3-letter ISO-639-3 code. '
+                   'Visit https://bit.ly/29fjNpm for a list of language codes.')
+def download_subtitles(directory, language, verbose=False):
+    download(directory, language, verbose)
 
 
 if __name__ == '__main__':
