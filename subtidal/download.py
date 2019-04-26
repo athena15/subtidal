@@ -48,47 +48,50 @@ def download(directory, language='eng', verbose=False):
         return 0
 
     # iterate over 'videos' and download subtitles
-    print('>>> Downloading subtitles...')
-    for movie_title, file, subdir in tqdm(videos):  # tqdm == progress bar
+    with click.progressbar(videos, label='Searching for subtitles') as bar:
+        for movie_title, file, subdir in bar:
 
-        try:
-            video = Video.fromname(file)
+            try:
+                video = Video.fromname(file)
 
-        except ValueError:
-            if verbose:
-                print(f'Could not find a match for file: {file}')
-            continue
+            except ValueError:
+                if verbose:
+                    print(f'Could not find a match for file: {file}')
+                continue
 
-        try:
-            os.chdir(subdir)
-            best_subtitles = download_best_subtitles([video], {Language('eng')},
-                                                     providers=['opensubtitles', 'thesubdb',
-                                                                'tvsubtitles'])
-            best_subtitle = best_subtitles[video][0]
-            save_subtitles(video, [best_subtitle])
-            if verbose:
-                print(f'Successfully downloaded subtitle for: {file}')
+            try:
+                os.chdir(subdir)
+                best_subtitles = download_best_subtitles([video], {Language(language)},
+                                                         providers=['opensubtitles', 'thesubdb',
+                                                                    'tvsubtitles'])
+                best_subtitle = best_subtitles[video][0]
+                save_subtitles(video, [best_subtitle])
+                if verbose:
+                    print(f'Successfully downloaded subtitle for: {file}')
 
-        except IndexError:
-            if verbose:
-                print(f'Subtitles not found online for: {file}')
-            continue
+            except IndexError:
+                if verbose:
+                    print(f'Subtitles not found online for: {file}')
+                continue
 
-        try:
-            old_name = str(os.path.join(subdir, movie_title)) + '.en.srt'
-            new_name = str(os.path.join(subdir, movie_title)) + '.srt'
-            if verbose:
-                print(f'Old name: {old_name}')
-                print(f'New name: {new_name}')
-                print(f'Path    : {str(os.path.join(subdir, movie_title))}')
-            os.rename(old_name, new_name)
+            successful += 1
 
-        except FileNotFoundError:
-            if verbose:
-                print(f"Couldn't rename subtitle file for: {movie_title}.")
-            break
+            if language == 'eng':
+                try:
+                    old_name = str(os.path.join(subdir, movie_title)) + '.en.srt'
+                    new_name = str(os.path.join(subdir, movie_title)) + '.srt'
+                    if verbose:
+                        print(f'Old name: {old_name}')
+                        print(f'New name: {new_name}')
+                        print(f'Path    : {str(os.path.join(subdir, movie_title))}')
+                    os.rename(old_name, new_name)
 
-        successful += 1
+                except FileNotFoundError:
+                    if verbose:
+                        print(f"Couldn't rename subtitle file for: {movie_title}.")
+                    break
+
+
 
     print()
     print(f'>>> Finished!')
