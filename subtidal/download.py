@@ -14,7 +14,7 @@ def download(directory, language='eng', verbose=False):
     Renames the subtitle file to match the video's name (in order to make it compatible with Roku Media Player.)
 
     :param (str) directory: Directory where video files or folders are located.
-    :param (str) language : [optional] Desired language for subtitles, expressed as a 3-letter ISO-639-3 code.
+    :param (str | tuple) language : [optional] Desired language for subtitles, expressed as a 3-letter ISO-639-3 code.
                             Visit https://bit.ly/29fjNpm for a list of language codes.
     :param (bool) verbose : [optional] Prints more output to the console.
 
@@ -62,8 +62,12 @@ def download(directory, language='eng', verbose=False):
                 continue
 
             try:
+                if isinstance(language, tuple):
+                    lang = Language(*language)
+                else:
+                    lang = Language(language)
                 os.chdir(subdir)
-                best_subtitles = download_best_subtitles([video], {Language(language)},
+                best_subtitles = download_best_subtitles([video], {lang},
                                                          providers=['opensubtitles', 'thesubdb',
                                                                     'tvsubtitles'])
                 best_subtitle = best_subtitles[video][0]
