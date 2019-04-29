@@ -42,6 +42,8 @@ download("./path/to/Your Movie Folder")
 download(directory="./path/to/Your Movie Folder", verbose=True)
 ```
 
+![subtidal-demo](https://drive.google.com/file/d/1MlJQrVGaocV80jZX5W7kYpjjH2xPWxDP/view?usp=sharing)
+
 ## Motivation
 
 I hope this project is of use to you. I got frustrated (or rather, was very mildly inconvenienced) because some of the movies I downloaded online didn't come included with subtitles, and I often found myself having to pause the movie I was watching to manually download them from sites like opensubtitles.org](https://opensubtitles.org).

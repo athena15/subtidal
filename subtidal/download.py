@@ -8,7 +8,7 @@ from babelfish import Language
 from subliminal import Video, download_best_subtitles, save_subtitles
 
 
-def download(directory, language='eng', verbose=False):
+def download(directory, language='eng', country=None, verbose=False):
     """
     Takes in a directory path, walks through the file tree, and downloads subtitles for any video files found.
     Renames the subtitle file to match the video's name (in order to make it compatible with Roku Media Player.)
@@ -16,6 +16,7 @@ def download(directory, language='eng', verbose=False):
     :param (str) directory: Directory where video files or folders are located.
     :param (str | tuple) language : [optional] Desired language for subtitles, expressed as a 3-letter ISO-639-3 code.
                             Visit https://bit.ly/29fjNpm for a list of language codes.
+    :param (str) country : Country code (needed in addition to language code for certain languages).
     :param (bool) verbose : [optional] Prints more output to the console.
 
     Examples:
@@ -61,8 +62,8 @@ def download(directory, language='eng', verbose=False):
                 continue
 
             try:
-                if isinstance(language, tuple):
-                    lang = Language(*language)
+                if language and country:
+                    lang = Language(language, country)
                 else:
                     lang = Language(language)
                 os.chdir(subdir)

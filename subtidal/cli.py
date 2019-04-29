@@ -13,8 +13,9 @@ from subtidal.download import download
 @click.option('--language', '-l', default='eng',
               help='Desired language for subtitles, expressed as a 3-letter ISO-639-3 code. '
                    'Visit https://bit.ly/29fjNpm for a list of language codes.')
-def download_subtitles(directory, language, verbose=False):
-    download(directory, language, verbose)
+@click.option('--country', '-c', required=False)
+def download_subtitles(directory, language, country, verbose=False):
+    download(directory, language, country, verbose)
 
 
 if __name__ == '__main__':
