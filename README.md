@@ -42,7 +42,7 @@ download("./path/to/Your Movie Folder")
 download(directory="./path/to/Your Movie Folder", verbose=True)
 ```
 
-![subtidal-demo](https://drive.google.com/file/d/1MlJQrVGaocV80jZX5W7kYpjjH2xPWxDP/view?usp=sharing)
+![subtidal-demo](https://drive.google.com/uc?export=view&id=1MlJQrVGaocV80jZX5W7kYpjjH2xPWxDP)
 
 ## Motivation
 
