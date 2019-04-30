@@ -62,8 +62,10 @@ def download_subtitles(directory, verbose=False):
     Takes in a directory path, walks through the file tree, and downloads subtitles for any video files found.
     Renames the subtitle file to match the video's name (in order to make it compatible with Roku Media Player.)
 
-    :param str directory: Directory where video files or folders are located.
-    :param bool verbose: bool [optional] Prints more output to the console.
+    :param (str) directory: Directory where video files or folders are located.
+    :param (str) language : [optional] Desired language for subtitles, expressed as a 3-letter ISO-639-3 code. Visit https://bit.ly/29fjNpm for a list of language codes.
+    :param (str) country : [optional] Country code (needed in addition to language code for certain languages).
+    :param (bool) verbose : [optional] Prints more output to the console.
 
     Examples:
     1. download_subtitles('./Users/Laura/Movies')
@@ -73,7 +75,7 @@ def download_subtitles(directory, verbose=False):
 
 
 ## Contributing
-Pull requests are welcome! Take the ball and run with it, kiddo.
+Pull requests are welcome!
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
