@@ -31,7 +31,7 @@ def download(directory, language='eng', country=None, verbose=False):
     directory = os.path.abspath(directory)
     if not os.path.isdir(directory):
         print(f'>>> Error: "{directory}" is not a valid directory. Please try again.')
-        return 0
+        return False
     print('>>> Walking the file tree...')
     for subdir, dirs, files in os.walk(directory):
         if verbose:
@@ -47,7 +47,7 @@ def download(directory, language='eng', country=None, verbose=False):
     # check to see if video files found
     if not videos:
         print('No movie files without subtitles found in folder.')
-        return 0
+        return False
 
     # iterate over 'videos' and download subtitles
     with click.progressbar(videos, label='Searching for subtitles') as bar:
@@ -95,7 +95,7 @@ def download(directory, language='eng', country=None, verbose=False):
                 except FileNotFoundError:
                     if verbose:
                         print(f"Couldn't rename subtitle file for: {movie_title}.")
-                    break
+                    continue
 
 
 
