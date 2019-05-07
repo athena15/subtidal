@@ -62,12 +62,12 @@ def download(directory, language='eng', country=None, verbose=False):
                 continue
 
             try:
-                if language and country:
+                if country is not None:
                     lang = Language(language, country)
                 else:
                     lang = Language(language)
                 os.chdir(subdir)
-                best_subtitles = download_best_subtitles([video], {lang},
+                best_subtitles = download_best_subtitles([video], {Language(language)},
                                                          providers=['opensubtitles', 'thesubdb',
                                                                     'tvsubtitles'])
                 best_subtitle = best_subtitles[video][0]
