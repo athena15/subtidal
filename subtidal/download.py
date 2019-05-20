@@ -37,7 +37,7 @@ def download(directory, language='eng', country=None, verbose=False):
         if verbose:
             print(subdir)
         for file in files:
-            if file.endswith((".mp4", ".avi", ".mkv")) and not file.startswith('.'):
+            if file.endswith((".mp4", ".avi", ".mkv", ".part")) and not file.startswith('.'):
                 movie_title = re.split('.mp4|.avi|.mkv', file)[0]
                 if os.path.isfile(str(os.path.join(subdir, movie_title) + '.srt')):
                     continue
