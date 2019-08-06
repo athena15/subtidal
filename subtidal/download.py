@@ -2,6 +2,7 @@
 
 import os
 import re
+from pprint import pprint
 
 import click
 from babelfish import Language
@@ -25,6 +26,7 @@ def download(directory, language='eng', country=None, verbose=False):
     """
     successful = 0
     videos = []
+    incompatible = []
 
     # Walk the file path, identifying video files that do not have a matching .srt (subtitle) file in the same folder.
     # Then collect the file and directory names within list 'videos' that we will iterate over later.
@@ -39,6 +41,8 @@ def download(directory, language='eng', country=None, verbose=False):
         for file in files:
             if file.endswith((".mp4", ".avi", ".mkv", ".part")) and not file.startswith('.'):
                 movie_title = re.split('.mp4|.avi|.mkv', file)[0]
+                if file.endswith('.avi'):
+                    incompatible.append(movie_title)
                 if os.path.isfile(str(os.path.join(subdir, movie_title) + '.srt')):
                     continue
                 else:
@@ -102,6 +106,9 @@ def download(directory, language='eng', country=None, verbose=False):
     print()
     print(f'>>> Finished!')
     print(f'>>> Fetched {successful} / {len(videos)} subtitle files successfully.')
+    if verbose:
+        print('Movies incompatible with Roku:')
+        pprint(incompatible)
     return
 
 
